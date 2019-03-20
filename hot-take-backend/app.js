@@ -1,7 +1,21 @@
+// srv addres : mongodb+srv://harith:<PASSWORD>@cluster0-9clfo.mongodb.net/test?retryWrites=true
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const app = express();
+const saucesRoutes = require('./routes/sauces');
+// const usersRoutes = require('./routes/users');
 
+
+
+mongoose.connect('mongodb+srv://harith:Tanzania_98@cluster0-9clfo.mongodb.net/test?retryWrites=true')
+  .then(() => {
+    console.log('Successfully connected to MongoDB Atlas!');
+  })
+  .catch((error) => {
+    console.log('Unable to connect to MongoDB Atlas!');
+    console.error(error);
+  });
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,26 +26,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-app.use('/api/stuff', (req, res, next) => {
-  const stuff = [
-    {
-      _id: 'oeihfzeoi',
-      title: 'My first thing',
-      description: 'All of the info about my first thing',
-      imageUrl: '',
-      price: 4900,
-      userId: 'qsomihvqios',
-    },
-    {
-      _id: 'oeihfzeomoihi',
-      title: 'My second thing',
-      description: 'All of the info about my second thing',
-      imageUrl: '',
-      price: 2900,
-      userId: 'qsomihvqios',
-    },
-  ];
-  res.status(200).json(stuff);
-});
+ app.use('/api/sauces', saucesRoutes);
+ // app.use('/api/auth', usersRoutes)
 
 module.exports = app;
