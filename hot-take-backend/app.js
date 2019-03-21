@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 const saucesRoutes = require('./routes/sauces');
-// const usersRoutes = require('./routes/users');
-
+const usersRoutes = require('./routes/users');
+const path = require('path')
 
 
 mongoose.connect('mongodb+srv://harith:Tanzania_98@cluster0-9clfo.mongodb.net/test?retryWrites=true')
@@ -26,7 +26,8 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
+ app.use('/images', express.static(path.join(__dirname, 'images')));
  app.use('/api/sauces', saucesRoutes);
- // app.use('/api/auth', usersRoutes)
+ app.use('/api/auth', usersRoutes)
 
 module.exports = app;

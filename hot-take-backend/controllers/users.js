@@ -1,4 +1,31 @@
+const wt = require('jsonwebtoken');
+const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+
+exports.signup = (req, res, next) => {
+  bcrypt.hash(req.body.password, 10).then(
+    (hash) => {
+      const user = new User({
+        email: req.body.email,
+        password: hash
+      });
+      user.save().then(
+        () => {
+          res.status(201).json({
+            message: 'User added successfully!'
+          });
+        }
+      ).catch(
+        (error) => {
+          res.status(500).json({
+            error: error
+          });
+        }
+      );
+    }
+  );
+};
+
 
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email }).then(
@@ -15,7 +42,7 @@ exports.login = (req, res, next) => {
               error: new Error('Incorrect password!')
             });
           }
-          const token = jwt.sign(
+          const token = wt.sign(
             { userId: user._id },
             'RANDOM_TOKEN_SECRET',
             { expiresIn: '24h' });
@@ -41,6 +68,3 @@ exports.login = (req, res, next) => {
   );
 }
 
-exports.login = (req , res , next) => {
-	
-}   
